@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('XM_bakeries', 'root', 
-null, {
+const sequelize = new Sequelize('XM_bakeries', 'root', null, {
     host: 'localhost',
     dialect: 'mysql'
   });
