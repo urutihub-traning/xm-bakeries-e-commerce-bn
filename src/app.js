@@ -1,26 +1,33 @@
-import express from "express";
-import cors from "cors";
-import morgan from "morgan";
-import routes from "./routes";
+const express = require("express");
+const mysql = require("mysql");
+const router = require("./routes/routes");
 
 const app = express();
 
-app.use(cors());
-app.use(morgan("dev"));
+//Middlewares
 
-app.use(routes);
+app.use(express.json());
+app.use("/api/v1/xm", router);
 
-export default app;
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize('XM_bakeries', 'root', null, {
-    host: 'localhost',
-    dialect: 'mysql'
+//db connection
+
+const conn = mysql.createConnection({
+  host: "localhost",
+  database: "XM_bakeries",
+  user: "root",
+});
+
+const connection = () => {
+  return new Promise((resolve, reject) => {
+    conn.connect((err) => {
+      if (err) {
+        reject(`Unable to connect to the database: ${err}`);
+      } else {
+        console.log("Database Connection has been established successfully.");
+        resolve();
+      }
+    });
   });
-  sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+};
+
+module.exports = { connection, app };
